@@ -169,11 +169,14 @@ export async function approveAndSendDraft(params: {
             ].join("\r\n");
 
             const rawBase64 = Buffer.from(emailRaw).toString("base64url");
+            const validThreadId = /^[0-9a-fA-F]{10,}$/.test(email.thread_id || "")
+              ? email.thread_id
+              : undefined;
             const directSend = await gmail.users.messages.send({
               userId: "me",
               requestBody: {
                 raw: rawBase64,
-                threadId: email.thread_id,
+                ...(validThreadId ? { threadId: validThreadId } : {}),
               },
             });
             sentGmailId = directSend.data.id || sentGmailId;
@@ -192,11 +195,14 @@ export async function approveAndSendDraft(params: {
         ].join("\r\n");
 
         const rawBase64 = Buffer.from(emailRaw).toString("base64url");
+        const validThreadId = /^[0-9a-fA-F]{10,}$/.test(email.thread_id || "")
+          ? email.thread_id
+          : undefined;
         const directSend = await gmail.users.messages.send({
           userId: "me",
           requestBody: {
             raw: rawBase64,
-            threadId: email.thread_id,
+            ...(validThreadId ? { threadId: validThreadId } : {}),
           },
         });
         sentGmailId = directSend.data.id || sentGmailId;
