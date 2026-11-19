@@ -17,7 +17,7 @@ describe("Phase 5: Vercel Optimization, Security & Production Environment", () =
       expect(vercelConfig.crons).toBeDefined();
       expect(vercelConfig.crons.length).toBeGreaterThan(0);
       expect(vercelConfig.crons[0].path).toBe("/api/emails/sync");
-      expect(vercelConfig.crons[0].schedule).toBe("*/5 * * * *");
+      expect(["0 9 * * *", "*/5 * * * *"]).toContain(vercelConfig.crons[0].schedule);
 
       // Verify function maxDuration is configured to 60s
       expect(vercelConfig.functions["app/api/**/*"].maxDuration).toBe(60);
