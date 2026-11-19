@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Environment secrets (never commit)
+.env
+.env.local
+.env.*.local
+
+# Logs & OS files
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Scratch & local test files
+scratch/
+test-gemini-live.js
+test-gemini-sdk.js
+test-results*.json
