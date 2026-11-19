@@ -82,11 +82,15 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (authLoading) return;
+    if (!user) {
+      router.replace("/login");
+      return;
+    }
     setAllEmails([]);
     setSelectedEmail(null);
-    fetchInbox(user?.email);
+    fetchInbox(user.email);
     fetchKnowledgeDocs();
-  }, [user?.email, authLoading]);
+  }, [user, authLoading, router]);
 
   const filteredEmails =
     activeFilter === "all"
@@ -422,6 +426,21 @@ export default function Dashboard() {
     setActiveView("mail");
     setActiveFilter(filter);
   };
+
+  if (authLoading || !user) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-[#f6f7f9] text-slate-600">
+        <div className="text-center space-y-3">
+          <div className="mx-auto w-8 h-8 rounded-md bg-slate-900 text-white flex items-center justify-center font-semibold text-xs shadow-sm">
+            PF
+          </div>
+          <p className="text-xs font-medium text-slate-500">
+            {authLoading ? "Loading workspace..." : "Redirecting to sign in..."}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen w-full bg-[#f6f7f9] font-sans text-slate-800 overflow-hidden">

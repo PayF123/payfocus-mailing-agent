@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import {
@@ -10,12 +10,11 @@ import {
   AlertCircle,
   CheckCircle2,
   Loader2,
-  ChevronRight,
 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
+  const { user, loading: authLoading, signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
 
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
@@ -23,6 +22,12 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.replace("/");
+    }
+  }, [user, authLoading, router]);
 
   const handleGoogleLogin = async () => {
     setLoading(true);
@@ -219,14 +224,10 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Local Workspace Link */}
-        <button
-          onClick={() => router.push("/")}
-          className="w-full flex items-center justify-between px-4 py-2.5 rounded-md bg-white hover:bg-slate-50 border border-slate-200/90 text-xs text-slate-600 hover:text-slate-900 transition shadow-sm"
-        >
-          <span>Open workspace directly (Local Operator)</span>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-        </button>
+        {/* Subtle Security Note */}
+        <p className="text-center text-[11px] text-slate-400">
+          Your session stays signed in on this browser until you sign out.
+        </p>
       </div>
     </div>
   );
